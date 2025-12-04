@@ -1,0 +1,40 @@
+class Alumno:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+        self.notas = []
+
+    def agregar_nota(self, nota):
+        self.notas.append(nota)
+
+    def promedio(self):
+        if len(self.notas) == 0:
+            return 0
+        return sum(self.notas) / len(self.notas)
+
+    def mostrar_info(self):
+        print("Nombre:", self.nombre)
+        print("Edad:", self.edad)
+        print("Notas:", self.notas)
+        print("Promedio:", self.promedio())
+
+
+def main():
+    nombre = input("Ingrese el nombre del alumno: ")
+    edad = int(input("Ingrese la edad del alumno: "))
+
+    alumno = Alumno(nombre, edad)
+
+    while True:
+        nota = input("Ingrese una nota (o escriba 'fin' para terminar): ")
+
+        if nota.lower() == "fin":
+            break
+
+        alumno.agregar_nota(float(nota))
+
+    alumno.mostrar_info()
+
+
+if __name__ == "__main__":
+    main()
