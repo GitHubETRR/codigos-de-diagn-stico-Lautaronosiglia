@@ -1,7 +1,12 @@
-class Alumno:
+class Persona:
     def __init__(self, nombre, edad):
         self.nombre = nombre
         self.edad = edad
+
+
+class Alumno(Persona):   # Alumno hereda de Persona
+    def __init__(self, nombre, edad):
+        super().__init__(nombre, edad)  # Llama al constructor de Persona
         self.notas = []
 
     def agregar_nota(self, nota):
@@ -13,10 +18,11 @@ class Alumno:
         return sum(self.notas) / len(self.notas)
 
     def mostrar_info(self):
+        print("\n--- INFORMACIÓN DEL ALUMNO ---")
         print("Nombre:", self.nombre)
         print("Edad:", self.edad)
         print("Notas:", self.notas)
-        print("Promedio:", self.promedio())
+        print("Promedio:", round(self.promedio(), 2))
 
 
 def main():
