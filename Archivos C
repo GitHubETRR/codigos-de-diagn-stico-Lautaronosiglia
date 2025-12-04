@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
+typedef struct {
+    char nombre[50];
+    int edad;
+    float promedio;
+} Estudiante;
+
+void registrarEstudiante() {
+    FILE *f = fopen("estudiantes.txt", "a");
+    if (f == NULL) {
+        printf("No se pudo abrir el archivo\n");
+        return;
+    }
+
+    Estudiante e;
+    printf("Nombre: ");
+    scanf("%s", e.nombre);
+    printf("Edad: ");
+    scanf("%d", &e.edad);
+    printf("Promedio: ");
+    scanf("%f", &e.promedio);
+
+    fprintf(f, "%s %d %.2f\n", e.nombre, e.edad, e.promedio);
+    fclose(f);
+}
+
+void mostrarEstudiantes() {
+    FILE *f = fopen("estudiantes.txt", "r");
+    if (f == NULL) {
+        printf("No se pudo abrir el archivo\n");
+        return;
+    }
+
+    Estudiante e;
+    printf("\nLista de Estudiantes:\n");
+    while (fscanf(f, "%s %d %f", e.nombre, &e.edad, &e.promedio) != EOF) {
+        printf("Nombre: %s | Edad: %d | Promedio: %.2f\n", e.nombre, e.edad, e.promedio);
+    }
+
+    fclose(f);
+}
+
+void buscarEstudiante() {
+    char buscado[50];
+    printf("Nombre a buscar: ");
+    scanf("%s", buscado);
+
+    FILE *f = fopen("estudiantes.txt", "r");
+    if (f == NULL) {
+        printf("No se pudo abrir el archivo\n");
+        return;
+    }
+
+    Estudiante e;
+    int encontrado = 0;
+    while (fscanf(f, "%s %d %f", e.nombre, &e.edad, &e.promedio) != EOF) {
+        if (strcmp(e.nombre, buscado) == 0) {
+            printf("Encontrado -> Edad: %d | Promedio: %.2f\n", e.edad, e.promedio);
+            encontrado = 1;
+            break;
+        }
+    }
+
+    if (!encontrado)
+        printf("No se encontró el estudiante.\n");
+
+    fclose(f);
+}
+
+void calcularPromedioGeneral() {
+    FILE *f = fopen("estudiantes.txt", "r");
+    if (f == NULL) {
+        printf("No se pudo abrir el archivo\n");
+        return;
+    }
+
+    Estudiante e;
+    int total = 0;
+    float suma = 0.0;
+
+    while (fscanf(f, "%s %d %f", e.nombre, &e.edad, &e.promedio) != EOF) {
+        suma += e.promedio;
+        total++;
+    }
+
+    if (total > 0)
+        printf("Promedio general: %.2f\n", suma / total);
+    else
+        printf("No hay estudiantes cargados.\n");
+
+    fclose(f);
+}
+
+int main() {
+    int opcion;
+    do {
+        printf("\n1. Registrar estudiante\n");
+        printf("2. Mostrar todos\n");
+        printf("3. Buscar por nombre\n");
+        printf("4. Promedio general\n");
+        printf("0. Salir\n");
+        printf("Opcion: ");
+        scanf("%d", &opcion);
+
+        switch(opcion) {
+            case 1: registrarEstudiante(); break;
+            case 2: mostrarEstudiantes(); break;
+            case 3: buscarEstudiante(); break;
+            case 4: calcularPromedioGeneral(); break;
+        }
+    } while(opcion != 0);
+
+    return 0;
+}
