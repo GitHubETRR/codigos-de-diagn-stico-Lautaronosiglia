@@ -1,0 +1,77 @@
+import json
+import os
+
+ARCHIVO = "tareas.json"
+
+def cargar_tareas():
+    if os.path.exists(ARCHIVO):
+        with open(ARCHIVO, "r") as f:
+            return json.load(f)
+    return []
+
+def guardar_tareas(tareas):
+    with open(ARCHIVO, "w") as f:
+        json.dump(tareas, f, indent=4)
+
+def mostrar_tareas(tareas):
+    if not tareas:
+        print("No hay tareas cargadas.")
+    else:
+        print("\n--- TAREAS ---")
+        for i, t in enumerate(tareas, start=1):
+            estado = "OK" if t["completa"] else "A Realizar"
+            print(f"{i}. {t['titulo']} - {estado}")
+    print()
+
+def agregar_tarea(tareas):
+    titulo = input("Titulo de la tarea: ")
+    tareas.append({"titulo": titulo, "completa": False})
+    print("Tarea agregada correctamente.")
+
+def completar_tarea(tareas):
+    mostrar_tareas(tareas)
+    try:
+        indice = int(input("Numero de tarea a completar: ")) - 1
+        tareas[indice]["completa"] = True
+        print("Tarea marcada como completa.")
+    except:
+        print("Indice invalido.")
+
+def eliminar_tarea(tareas):
+    mostrar_tareas(tareas)
+    try:
+        indice = int(input("Numero de tarea a eliminar: ")) - 1
+        tareas.pop(indice)
+        print("Tarea eliminada.")
+    except:
+        print("Indice invalido.")
+
+def main():
+    tareas = cargar_tareas()
+    while True:
+        print("--- MENU ---")
+        print("1. Ver tareas")
+        print("2. Agregar tarea")
+        print("3. Completar tarea")
+        print("4. Eliminar tarea")
+        print("5. Guardar y salir")
+
+        opcion = input("Elegi una opcion: ")
+
+        if opcion == "1":
+            mostrar_tareas(tareas)
+        elif opcion == "2":
+            agregar_tarea(tareas)
+        elif opcion == "3":
+            completar_tarea(tareas)
+        elif opcion == "4":
+            eliminar_tarea(tareas)
+        elif opcion == "5":
+            guardar_tareas(tareas)
+            print("Datos guardados, ciao")
+            break
+        else:
+            print("Opción invalida.")
+
+if __name__ == "__main__":
+    main()
