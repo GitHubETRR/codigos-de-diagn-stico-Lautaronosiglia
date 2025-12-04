@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+
+class Persona {
+public:
+    string nombre;
+
+    Persona() {}
+
+    Persona(string n) {
+        nombre = n;
+    }
+};
+
+class Alumno : public Persona {
+public:
+    float nota1, nota2, nota3;
+    float promedio;
+
+    Alumno() {}
+
+    Alumno(string n, float n1, float n2, float n3)
+        : Persona(n) 
+    {
+        nota1 = n1;
+        nota2 = n2;
+        nota3 = n3;
+        promedio = (n1 + n2 + n3) / 3;
+    }
+
+    void mostrar() {
+        cout << nombre << " - Promedio: " << promedio;
+        if (promedio >= 7)
+            cout << " Aprobado\n";
+        else
+            cout << " Desaprobado\n";
+    }
+};
+
+int main() {
+    int cantidad;
+    cout << "Ingrese la cantidad de alumnos: ";
+    cin >> cantidad;
+
+    Alumno* alumnos = new Alumno[cantidad];
+
+    for (int i = 0; i < cantidad; i++) {
+        string nombre;
+        float n1, n2, n3;
+
+        cout << "\nAlumno " << i + 1 << endl;
+        cout << "Nombre: ";
+        cin >> nombre;
+        cout << "Nota 1: ";
+        cin >> n1;
+        cout << "Nota 2: ";
+        cin >> n2;
+        cout << "Nota 3: ";
+        cin >> n3;
+
+        alumnos[i] = Alumno(nombre, n1, n2, n3);
+    }
+
+    ofstream archivo("alumnos.txt");
+
+    if (!archivo) {
+        cout << "Error creando archivo.\n";
+        return 1;
+    }
+
+    archivo << "Nombre Nota1 Nota2 Nota3 Promedio\n";
+
+    for (int i = 0; i < cantidad; i++) {
+        archivo << alumnos[i].nombre << " "
+                << alumnos[i].nota1 << " "
+                << alumnos[i].nota2 << " "
+                << alumnos[i].nota3 << " "
+                << alumnos[i].promedio << "\n";
+    }
+
+    archivo.close();
+    cout << "\nDatos guardados en alumnos.txt\n";
+
+    cout << "\nListado de Alumnos:\n";
+    for (int i = 0; i < cantidad; i++) {
+        alumnos[i].mostrar();
+    }
+
+    delete[] alumnos;
+
+    return 0;
+}
